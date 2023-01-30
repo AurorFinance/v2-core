@@ -14,7 +14,7 @@ export async function deployFactory() : Promise<string> {
 	const [deployer] = await ethers.getSigners();
 	console.log('ℹ️  Deploying contract with address:', deployer.address);
 
-	const ContractSource = await ethers.getContractFactory('UniswapV2Factory');
+	const ContractSource = await ethers.getContractFactory('AegisV2Factory');
 	const deployedContract = await ContractSource.deploy(adminAddresses.feeToSetter);
 
 	await deployedContract.deployed();
