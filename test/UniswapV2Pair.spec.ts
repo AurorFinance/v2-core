@@ -21,7 +21,7 @@ describe('AegisV2Pair', () => {
     mnemonic: 'horn horn horn horn horn horn horn horn horn horn horn horn',
     gasLimit: 9999999
   })
-  const [wallet, other] = provider.getWallets()
+  const [wallet, feeTo,  other] = provider.getWallets()
   const loadFixture = createFixtureLoader(provider, [wallet])
 
   let factory: Contract
@@ -34,6 +34,7 @@ describe('AegisV2Pair', () => {
     token0 = fixture.token0
     token1 = fixture.token1
     pair = fixture.pair
+    await factory.connect(wallet).setFeeTo(feeTo.address);
   })
 
   it('mint', async () => {
@@ -177,7 +178,7 @@ describe('AegisV2Pair', () => {
     await mineBlock(provider, (await provider.getBlock('latest')).timestamp + 1)
     const tx = await pair.swap(expectedOutputAmount, 0, wallet.address, '0x', overrides)
     const receipt = await tx.wait()
-    expect(receipt.gasUsed).to.eq(73462)
+    expect(receipt.gasUsed).to.eq(80478)
   })
 
   it('burn', async () => {
@@ -243,6 +244,7 @@ describe('AegisV2Pair', () => {
   })
 
   it('feeTo:off', async () => {
+    await factory.setFeeTo('0x0000000000000000000000000000000000000000')
     const token0Amount = expandTo18Decimals(1000)
     const token1Amount = expandTo18Decimals(1000)
     await addLiquidity(token0Amount, token1Amount)
@@ -259,8 +261,6 @@ describe('AegisV2Pair', () => {
   })
 
   it('feeTo:on', async () => {
-    await factory.setFeeTo(other.address)
-
     const token0Amount = expandTo18Decimals(1000)
     const token1Amount = expandTo18Decimals(1000)
     await addLiquidity(token0Amount, token1Amount)
@@ -274,7 +274,7 @@ describe('AegisV2Pair', () => {
     await pair.transfer(pair.address, expectedLiquidity.sub(MINIMUM_LIQUIDITY))
     await pair.burn(wallet.address, overrides)
     expect(await pair.totalSupply()).to.eq(MINIMUM_LIQUIDITY.add('249750499251388'))
-    expect(await pair.balanceOf(other.address)).to.eq('249750499251388')
+    expect(await pair.balanceOf(feeTo.address)).to.eq('249750499251388')
 
     // using 1000 here instead of the symbolic MINIMUM_LIQUIDITY because the amounts only happen to be equal...
     // ...because the initial liquidity amounts were equal
