@@ -21,7 +21,7 @@ describe('AegisV2Pair', () => {
     mnemonic: 'horn horn horn horn horn horn horn horn horn horn horn horn',
     gasLimit: 9999999
   })
-  const [wallet, feeTo,  other] = provider.getWallets()
+  const [wallet, feeTo, other] = provider.getWallets()
   const loadFixture = createFixtureLoader(provider, [wallet])
 
   let factory: Contract
@@ -34,7 +34,7 @@ describe('AegisV2Pair', () => {
     token0 = fixture.token0
     token1 = fixture.token1
     pair = fixture.pair
-    await factory.connect(wallet).setFeeTo(feeTo.address);
+    await factory.connect(wallet).setFeeTo(feeTo.address)
   })
 
   it('mint', async () => {
@@ -102,9 +102,7 @@ describe('AegisV2Pair', () => {
       const [outputAmount, token0Amount, token1Amount, inputAmount] = optimisticTestCase
       await addLiquidity(token0Amount, token1Amount)
       await token0.transfer(pair.address, inputAmount)
-      await expect(pair.swap(outputAmount.add(1), 0, wallet.address, '0x', overrides)).to.be.revertedWith(
-        'AegisV2: K'
-      )
+      await expect(pair.swap(outputAmount.add(1), 0, wallet.address, '0x', overrides)).to.be.revertedWith('AegisV2: K')
       await pair.swap(outputAmount, 0, wallet.address, '0x', overrides)
     })
   })
