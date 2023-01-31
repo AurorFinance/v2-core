@@ -1,6 +1,6 @@
 # Aegis V2
 
-[![Actions Status](https://github.com/Uniswap/uniswap-v2-core/workflows/CI/badge.svg)](https://github.com/Uniswap/uniswap-v2-core/actions)
+[![Actions Status](https://github.com/0xobLabs/v2-core/workflows/CI/badge.svg)](https://github.com/0xobLabs/v2-core/actions)
 
 In-depth documentation on Uniswap V2 is available at [uniswap.org](https://uniswap.org/docs).
 
