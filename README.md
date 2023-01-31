@@ -22,4 +22,4 @@ The following assumes the use of `node@10.24.1`.
 
 ## Deployment
 
-`cd deployment` + run hardhat script
+`cd deployment && npx hardhat run scripts/deployFactory.ts`
