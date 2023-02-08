@@ -15,13 +15,13 @@ const overrides = {
   gasLimit: 9999999
 }
 
-describe('UniswapV2Pair', () => {
+describe('AegisV2Pair', () => {
   const provider = new MockProvider({
     hardfork: 'istanbul',
     mnemonic: 'horn horn horn horn horn horn horn horn horn horn horn horn',
     gasLimit: 9999999
   })
-  const [wallet, other] = provider.getWallets()
+  const [wallet, feeTo, other] = provider.getWallets()
   const loadFixture = createFixtureLoader(provider, [wallet])
 
   let factory: Contract
@@ -34,6 +34,7 @@ describe('UniswapV2Pair', () => {
     token0 = fixture.token0
     token1 = fixture.token1
     pair = fixture.pair
+    await factory.connect(wallet).setFeeTo(feeTo.address)
   })
 
   it('mint', async () => {
@@ -84,7 +85,7 @@ describe('UniswapV2Pair', () => {
       await addLiquidity(token0Amount, token1Amount)
       await token0.transfer(pair.address, swapAmount)
       await expect(pair.swap(0, expectedOutputAmount.add(1), wallet.address, '0x', overrides)).to.be.revertedWith(
-        'UniswapV2: K'
+        'AegisV2: K'
       )
       await pair.swap(0, expectedOutputAmount, wallet.address, '0x', overrides)
     })
@@ -101,9 +102,7 @@ describe('UniswapV2Pair', () => {
       const [outputAmount, token0Amount, token1Amount, inputAmount] = optimisticTestCase
       await addLiquidity(token0Amount, token1Amount)
       await token0.transfer(pair.address, inputAmount)
-      await expect(pair.swap(outputAmount.add(1), 0, wallet.address, '0x', overrides)).to.be.revertedWith(
-        'UniswapV2: K'
-      )
+      await expect(pair.swap(outputAmount.add(1), 0, wallet.address, '0x', overrides)).to.be.revertedWith('AegisV2: K')
       await pair.swap(outputAmount, 0, wallet.address, '0x', overrides)
     })
   })
@@ -177,7 +176,7 @@ describe('UniswapV2Pair', () => {
     await mineBlock(provider, (await provider.getBlock('latest')).timestamp + 1)
     const tx = await pair.swap(expectedOutputAmount, 0, wallet.address, '0x', overrides)
     const receipt = await tx.wait()
-    expect(receipt.gasUsed).to.eq(73462)
+    expect(receipt.gasUsed).to.eq(80478)
   })
 
   it('burn', async () => {
@@ -243,6 +242,7 @@ describe('UniswapV2Pair', () => {
   })
 
   it('feeTo:off', async () => {
+    await factory.setFeeTo('0x0000000000000000000000000000000000000000')
     const token0Amount = expandTo18Decimals(1000)
     const token1Amount = expandTo18Decimals(1000)
     await addLiquidity(token0Amount, token1Amount)
@@ -259,8 +259,6 @@ describe('UniswapV2Pair', () => {
   })
 
   it('feeTo:on', async () => {
-    await factory.setFeeTo(other.address)
-
     const token0Amount = expandTo18Decimals(1000)
     const token1Amount = expandTo18Decimals(1000)
     await addLiquidity(token0Amount, token1Amount)
@@ -274,7 +272,7 @@ describe('UniswapV2Pair', () => {
     await pair.transfer(pair.address, expectedLiquidity.sub(MINIMUM_LIQUIDITY))
     await pair.burn(wallet.address, overrides)
     expect(await pair.totalSupply()).to.eq(MINIMUM_LIQUIDITY.add('249750499251388'))
-    expect(await pair.balanceOf(other.address)).to.eq('249750499251388')
+    expect(await pair.balanceOf(feeTo.address)).to.eq('249750499251388')
 
     // using 1000 here instead of the symbolic MINIMUM_LIQUIDITY because the amounts only happen to be equal...
     // ...because the initial liquidity amounts were equal
