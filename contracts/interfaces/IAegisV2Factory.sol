@@ -14,4 +14,6 @@ interface IAegisV2Factory {
 
     function setFeeTo(address) external;
     function setFeeToSetter(address) external;
+    
+    function allowedCaller() external returns(address);
 }

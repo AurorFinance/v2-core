@@ -1,5 +1,6 @@
 import { ethers } from 'hardhat';
 import * as dotenv from 'dotenv';
+import factoryAbi from "../artifacts/contracts/AegisV2Factory.sol/AegisV2Factory.json";
 
 dotenv.config({path: process.cwd() + '/scripts/process.env'});
 
@@ -8,7 +9,7 @@ const adminAddresses = {
 	feeTo: process.env.AEGIS_TREASURY_ADDRESS!,
 }
 
-const GAS_LIMIT = 6000000;
+const GAS_LIMIT = 9999999;
 
 export async function deployFactory() : Promise<string> {
 	const [deployer] = await ethers.getSigners();
@@ -31,4 +32,14 @@ export async function deployFactory() : Promise<string> {
 	console.log('🧐 Init pair hash:', hash);
 
   return deployedContract.address;
+}
+
+export async function setAllowedCaller(contractAddr: string, caller: string) : Promise<void> {
+	const [deployer] = await ethers.getSigners();
+	console.log('ℹ️  Deploying contract with address:', deployer.address);
+
+	const contract = new ethers.Contract(contractAddr, factoryAbi.abi, deployer);
+	await contract.connect(deployer).setAllowedCaller(caller);
+
+	console.log('😎 Set the allowed caller');
 }

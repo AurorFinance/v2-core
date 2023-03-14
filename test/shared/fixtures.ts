@@ -18,6 +18,7 @@ const overrides = {
 
 export async function factoryFixture(_: Web3Provider, [wallet]: Wallet[]): Promise<FactoryFixture> {
   const factory = await deployContract(wallet, AegisV2Factory, [wallet.address], overrides)
+  await factory.connect(wallet).setAllowedCaller(wallet.address);
   return { factory }
 }
 

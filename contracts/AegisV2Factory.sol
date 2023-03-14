@@ -9,6 +9,9 @@ contract AegisV2Factory is IAegisV2Factory {
     address public feeTo;
     address public feeToSetter;
 
+    // lock core to be called only by the allowed router
+    address public allowedCaller;
+
     mapping(address => mapping(address => address)) public getPair;
     address[] public allPairs;
 
@@ -47,5 +50,10 @@ contract AegisV2Factory is IAegisV2Factory {
     function setFeeToSetter(address _feeToSetter) external {
         require(msg.sender == feeToSetter, 'AegisV2: FORBIDDEN');
         feeToSetter = _feeToSetter;
+    }
+
+    function setAllowedCaller(address _allowedCaller) external {
+        require(msg.sender == feeToSetter, "AegisV2: FORBIDDEN");
+        allowedCaller = _allowedCaller;
     }
 }
