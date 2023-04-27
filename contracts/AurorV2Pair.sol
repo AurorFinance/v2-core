@@ -35,7 +35,7 @@ contract AurorV2Pair is IAurorV2Pair, AurorV2ERC20 {
         unlocked = 1;
     }
 
-    modifier aegisCaller() {
+    modifier aurorCaller() {
         require(msg.sender == IAurorV2Factory(factory).allowedCaller(), "AurorV2: FORBIDDEN");
         _;
     }
@@ -113,7 +113,7 @@ contract AurorV2Pair is IAurorV2Pair, AurorV2ERC20 {
     }
 
     // this low-level function should be called from a contract which performs important safety checks
-    function mint(address to) external lock aegisCaller returns (uint liquidity) {
+    function mint(address to) external lock aurorCaller returns (uint liquidity) {
         (uint112 _reserve0, uint112 _reserve1,) = getReserves(); // gas savings
         uint balance0 = IERC20(token0).balanceOf(address(this));
         uint balance1 = IERC20(token1).balanceOf(address(this));
@@ -137,7 +137,7 @@ contract AurorV2Pair is IAurorV2Pair, AurorV2ERC20 {
     }
 
     // this low-level function should be called from a contract which performs important safety checks
-    function burn(address to) external lock aegisCaller returns (uint amount0, uint amount1) {
+    function burn(address to) external lock aurorCaller returns (uint amount0, uint amount1) {
         (uint112 _reserve0, uint112 _reserve1,) = getReserves(); // gas savings
         address _token0 = token0;                                // gas savings
         address _token1 = token1;                                // gas savings
@@ -169,7 +169,7 @@ contract AurorV2Pair is IAurorV2Pair, AurorV2ERC20 {
     }
 
     // this low-level function should be called from a contract which performs important safety checks
-    function swap(uint amount0Out, uint amount1Out, address to, bytes calldata data) external lock aegisCaller {
+    function swap(uint amount0Out, uint amount1Out, address to, bytes calldata data) external lock aurorCaller {
         require(amount0Out > 0 || amount1Out > 0, 'AurorV2: INSUFFICIENT_OUTPUT_AMOUNT');
         (uint112 _reserve0, uint112 _reserve1,) = getReserves(); // gas savings
         require(amount0Out < _reserve0 && amount1Out < _reserve1, 'AurorV2: INSUFFICIENT_LIQUIDITY');
@@ -182,7 +182,7 @@ contract AurorV2Pair is IAurorV2Pair, AurorV2ERC20 {
         require(to != _token0 && to != _token1, 'AurorV2: INVALID_TO');
         if (amount0Out > 0) _safeTransfer(_token0, to, amount0Out); // optimistically transfer tokens
         if (amount1Out > 0) _safeTransfer(_token1, to, amount1Out); // optimistically transfer tokens
-        if (data.length > 0) IAurorV2Callee(to).aegisV2Call(msg.sender, amount0Out, amount1Out, data);
+        if (data.length > 0) IAurorV2Callee(to).aurorV2Call(msg.sender, amount0Out, amount1Out, data);
         balance0 = IERC20(_token0).balanceOf(address(this));
         balance1 = IERC20(_token1).balanceOf(address(this));
         }
@@ -200,7 +200,7 @@ contract AurorV2Pair is IAurorV2Pair, AurorV2ERC20 {
     }
 
     // force balances to match reserves
-    function skim(address to) external lock aegisCaller {
+    function skim(address to) external lock aurorCaller {
         address _token0 = token0; // gas savings
         address _token1 = token1; // gas savings
         _safeTransfer(_token0, to, IERC20(_token0).balanceOf(address(this)).sub(reserve0));
@@ -208,7 +208,7 @@ contract AurorV2Pair is IAurorV2Pair, AurorV2ERC20 {
     }
 
     // force reserves to match balances
-    function sync() external lock aegisCaller {
+    function sync() external lock aurorCaller {
         _update(IERC20(token0).balanceOf(address(this)), IERC20(token1).balanceOf(address(this)), reserve0, reserve1);
     }
 }
