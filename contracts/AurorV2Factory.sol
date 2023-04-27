@@ -1,10 +1,10 @@
 pragma solidity =0.5.16;
 
-import './interfaces/IAegisV2Factory.sol';
-import './AegisV2Pair.sol';
+import './interfaces/IAurorV2Factory.sol';
+import './AurorV2Pair.sol';
 
-contract AegisV2Factory is IAegisV2Factory {
-    bytes32 public constant INIT_CODE_PAIR_HASH = keccak256(abi.encodePacked(type(AegisV2Pair).creationCode));
+contract AurorV2Factory is IAurorV2Factory {
+    bytes32 public constant INIT_CODE_PAIR_HASH = keccak256(abi.encodePacked(type(AurorV2Pair).creationCode));
 
     address public feeTo;
     address public feeToSetter;
@@ -26,16 +26,16 @@ contract AegisV2Factory is IAegisV2Factory {
     }
 
     function createPair(address tokenA, address tokenB) external returns (address pair) {
-        require(tokenA != tokenB, 'AegisV2: IDENTICAL_ADDRESSES');
+        require(tokenA != tokenB, 'AurorV2: IDENTICAL_ADDRESSES');
         (address token0, address token1) = tokenA < tokenB ? (tokenA, tokenB) : (tokenB, tokenA);
-        require(token0 != address(0), 'AegisV2: ZERO_ADDRESS');
-        require(getPair[token0][token1] == address(0), 'AegisV2: PAIR_EXISTS'); // single check is sufficient
-        bytes memory bytecode = type(AegisV2Pair).creationCode;
+        require(token0 != address(0), 'AurorV2: ZERO_ADDRESS');
+        require(getPair[token0][token1] == address(0), 'AurorV2: PAIR_EXISTS'); // single check is sufficient
+        bytes memory bytecode = type(AurorV2Pair).creationCode;
         bytes32 salt = keccak256(abi.encodePacked(token0, token1));
         assembly {
             pair := create2(0, add(bytecode, 32), mload(bytecode), salt)
         }
-        IAegisV2Pair(pair).initialize(token0, token1);
+        IAurorV2Pair(pair).initialize(token0, token1);
         getPair[token0][token1] = pair;
         getPair[token1][token0] = pair; // populate mapping in the reverse direction
         allPairs.push(pair);
@@ -43,17 +43,17 @@ contract AegisV2Factory is IAegisV2Factory {
     }
 
     function setFeeTo(address _feeTo) external {
-        require(msg.sender == feeToSetter, 'AegisV2: FORBIDDEN');
+        require(msg.sender == feeToSetter, 'AurorV2: FORBIDDEN');
         feeTo = _feeTo;
     }
 
     function setFeeToSetter(address _feeToSetter) external {
-        require(msg.sender == feeToSetter, 'AegisV2: FORBIDDEN');
+        require(msg.sender == feeToSetter, 'AurorV2: FORBIDDEN');
         feeToSetter = _feeToSetter;
     }
 
     function setAllowedCaller(address _allowedCaller) external {
-        require(msg.sender == feeToSetter, "AegisV2: FORBIDDEN");
+        require(msg.sender == feeToSetter, "AurorV2: FORBIDDEN");
         allowedCaller = _allowedCaller;
     }
 }

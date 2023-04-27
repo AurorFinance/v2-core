@@ -1,6 +1,6 @@
 import { ethers } from 'hardhat';
 import * as dotenv from 'dotenv';
-import factoryAbi from "../artifacts/contracts/AegisV2Factory.sol/AegisV2Factory.json";
+import factoryAbi from "../artifacts/contracts/AurorV2Factory.sol/AurorV2Factory.json";
 
 dotenv.config({path: process.cwd() + '/scripts/process.env'});
 
@@ -15,7 +15,7 @@ export async function deployFactory() : Promise<string> {
 	const [deployer] = await ethers.getSigners();
 	console.log('ℹ️  Deploying contract with address:', deployer.address);
 
-	const ContractSource = await ethers.getContractFactory('AegisV2Factory');
+	const ContractSource = await ethers.getContractFactory('AurorV2Factory');
 	const deployedContract = await ContractSource.deploy(adminAddresses.feeToSetter);
 
 	await deployedContract.deployed();

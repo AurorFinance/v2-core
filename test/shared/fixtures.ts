@@ -5,8 +5,8 @@ import { deployContract } from 'ethereum-waffle'
 import { expandTo18Decimals } from './utilities'
 
 import ERC20 from '../../build/ERC20.json'
-import AegisV2Factory from '../../build/AegisV2Factory.json'
-import AegisV2Pair from '../../build/AegisV2Pair.json'
+import AurorV2Factory from '../../build/AurorV2Factory.json'
+import AurorV2Pair from '../../build/AurorV2Pair.json'
 
 interface FactoryFixture {
   factory: Contract
@@ -17,7 +17,7 @@ const overrides = {
 }
 
 export async function factoryFixture(_: Web3Provider, [wallet]: Wallet[]): Promise<FactoryFixture> {
-  const factory = await deployContract(wallet, AegisV2Factory, [wallet.address], overrides)
+  const factory = await deployContract(wallet, AurorV2Factory, [wallet.address], overrides)
   await factory.connect(wallet).setAllowedCaller(wallet.address);
   return { factory }
 }
@@ -36,7 +36,7 @@ export async function pairFixture(provider: Web3Provider, [wallet]: Wallet[]): P
 
   await factory.createPair(tokenA.address, tokenB.address, overrides)
   const pairAddress = await factory.getPair(tokenA.address, tokenB.address)
-  const pair = new Contract(pairAddress, JSON.stringify(AegisV2Pair.abi), provider).connect(wallet)
+  const pair = new Contract(pairAddress, JSON.stringify(AurorV2Pair.abi), provider).connect(wallet)
 
   const token0Address = (await pair.token0()).address
   const token0 = tokenA.address === token0Address ? tokenA : tokenB
