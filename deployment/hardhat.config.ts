@@ -55,6 +55,22 @@ const config: HardhatUserConfig = {
       ],
       allowUnlimitedContractSize: true
     },
+    arbMainnet: {
+      url: "https://arb1.arbitrum.io/rpc",
+      chainId: 42161,
+      accounts: ["0xd246a88a09e5c9be88d03a33d03257e3331fc4f880c76b02c5fb05afbae5d528"],
+      gas: "auto",
+      gasPrice: "auto",
+      allowUnlimitedContractSize: true,
+    },
+    arbTestnet: {
+      url: "https://goerli-rollup.arbitrum.io/rpc",
+      chainId: 421613,
+      accounts: [process.env.AUROR_MANAGER_KEY!],
+      gas: "auto",
+      gasPrice: "auto",
+      allowUnlimitedContractSize: true,
+    },
     cronosMainnet: {
       url: 'https://evm.cronos.org',
       chainId: 25,
