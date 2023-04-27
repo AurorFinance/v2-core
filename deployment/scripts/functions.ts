@@ -5,8 +5,8 @@ import factoryAbi from "../artifacts/contracts/AurorV2Factory.sol/AurorV2Factory
 dotenv.config({path: process.cwd() + '/scripts/process.env'});
 
 const adminAddresses = {
-  feeToSetter: process.env.AEGIS_MANAGER_ADDRESS!,
-	feeTo: process.env.AEGIS_TREASURY_ADDRESS!,
+  feeToSetter: process.env.AUROR_MANAGER_ADDRESS!,
+	feeTo: process.env.AUROR_TREASURY_ADDRESS!,
 }
 
 const GAS_LIMIT = 9999999;

@@ -33,11 +33,11 @@ const config: HardhatUserConfig = {
     hardhat: {
       accounts: [
         {
-          privateKey: process.env.AEGIS_MANAGER_KEY!,
+          privateKey: process.env.AUROR_MANAGER_KEY!,
           balance: '1000000000000000000000000000000000000000000'
         },
         {
-          privateKey: process.env.AEGIS_TREASURY_KEY!,
+          privateKey: process.env.AUROR_TREASURY_KEY!,
           balance: '1000000000000000000000000000000000000000000'
         },
         {
@@ -58,7 +58,7 @@ const config: HardhatUserConfig = {
     cronosMainnet: {
       url: 'https://evm.cronos.org',
       chainId: 25,
-      accounts: [process.env.AEGIS_MANAGER_KEY!],
+      accounts: [process.env.AUROR_MANAGER_KEY!],
       gas: 'auto',
       gasPrice: 'auto',
       allowUnlimitedContractSize: true
@@ -66,7 +66,7 @@ const config: HardhatUserConfig = {
     cronosTestnet: {
       url: 'https://evm-t3.cronos.org',
       chainId: 338,
-      accounts: [process.env.AEGIS_MANAGER_KEY!],
+      accounts: [process.env.AUROR_MANAGER_KEY!],
       gas: 'auto',
       gasPrice: 'auto',
       allowUnlimitedContractSize: true
@@ -74,7 +74,7 @@ const config: HardhatUserConfig = {
     avaxTestnet: {
       url: 'https://api.avax-test.network/ext/bc/C/rpc',
       chainId: 43113,
-      accounts: [process.env.AEGIS_MANAGER_KEY!],
+      accounts: [process.env.AUROR_MANAGER_KEY!],
       gas: 'auto',
       gasPrice: 'auto',
       allowUnlimitedContractSize: true
