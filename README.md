@@ -1,4 +1,4 @@
-# Aegis V2
+# Auror V2
 
 [![Actions Status](https://github.com/0xobLabs/v2-core/workflows/CI/badge.svg)](https://github.com/0xobLabs/v2-core/actions)
 

@@ -1,12 +1,12 @@
 pragma solidity =0.5.16;
 
-import './interfaces/IAegisV2ERC20.sol';
+import './interfaces/IAurorV2ERC20.sol';
 import './libraries/SafeMath.sol';
 
-contract AegisV2ERC20 is IAegisV2ERC20 {
+contract AurorV2ERC20 is IAurorV2ERC20 {
     using SafeMath for uint;
 
-    string public constant name = 'Aegis V2';
+    string public constant name = 'Auror V2';
     string public constant symbol = 'AEG-V2';
     uint8 public constant decimals = 18;
     uint  public totalSupply;
@@ -79,7 +79,7 @@ contract AegisV2ERC20 is IAegisV2ERC20 {
     }
 
     function permit(address owner, address spender, uint value, uint deadline, uint8 v, bytes32 r, bytes32 s) external {
-        require(deadline >= block.timestamp, 'AegisV2: EXPIRED');
+        require(deadline >= block.timestamp, 'AurorV2: EXPIRED');
         bytes32 digest = keccak256(
             abi.encodePacked(
                 '\x19\x01',
@@ -88,7 +88,7 @@ contract AegisV2ERC20 is IAegisV2ERC20 {
             )
         );
         address recoveredAddress = ecrecover(digest, v, r, s);
-        require(recoveredAddress != address(0) && recoveredAddress == owner, 'AegisV2: INVALID_SIGNATURE');
+        require(recoveredAddress != address(0) && recoveredAddress == owner, 'AurorV2: INVALID_SIGNATURE');
         _approve(owner, spender, value);
     }
 }
